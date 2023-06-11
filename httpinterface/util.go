@@ -32,6 +32,18 @@ func VerifySignature(payload []byte, hash, key string) (bool, error) {
 
 }
 
+// VirifyType - check if a given event  type is supported
+func VerifyEvent(eventType string) bool {
+	switch eventType {
+
+	case "push":
+		return true
+
+	default:
+		return false
+	}
+}
+
 func StreamToByte(stream io.Reader) ([]byte, error) {
 	buf := new(bytes.Buffer)
 	_, err := buf.ReadFrom(stream)

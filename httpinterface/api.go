@@ -106,6 +106,14 @@ func WebHookListener(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	eventType := r.Header.Get("X-GitHub-Event")
+	if !VerifyEvent(eventType) {
+		Respond(w, 400, map[string]interface{}{
+			"error": fmt.Sprintf("invalid event: %s type is not supported.", eventType),
+		})
+		return
+	}
+
 	var payload WebhookPayload
 	err = json.Unmarshal(bodyInBytes, &payload)
 	if err != nil {
