@@ -39,6 +39,9 @@ func VerifyEvent(eventType string) bool {
 	case "push":
 		return true
 
+	case "release":
+		return true
+
 	default:
 		return false
 	}

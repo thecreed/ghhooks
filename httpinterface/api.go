@@ -123,21 +123,23 @@ func WebHookListener(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if payload.Ref == "" {
-		Respond(w, 400, map[string]interface{}{
-			"error": "invalid payload: cannot find ref inside given payload",
-		})
-		return
-	}
+	if eventType == "push" {
+		if payload.Ref == "" {
+			Respond(w, 400, map[string]interface{}{
+				"error": "invalid payload: cannot find ref inside given payload",
+			})
+			return
+		}
 
-	branchStringArr := strings.Split(payload.Ref, "/")
-	branchString := branchStringArr[len(branchStringArr)-1]
+		branchStringArr := strings.Split(payload.Ref, "/")
+		branchString := branchStringArr[len(branchStringArr)-1]
 
-	if project.Branch != branchString {
-		Respond(w, 200, map[string]interface{}{
-			"message": "request recieved but the push event is not for the configured branch",
-		})
-		return
+		if project.Branch != branchString {
+			Respond(w, 200, map[string]interface{}{
+				"message": "request recieved but the push event is not for the configured branch",
+			})
+			return
+		}
 	}
 
 	// enqueing job
